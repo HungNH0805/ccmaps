@@ -77,7 +77,7 @@ function _ccmaps_get_base($hall_level_tid, $attribute_id) {
         'nid' => $base->nid,
         'title' => $base->title,
         'image' => file_create_url($base->field_images['und'][0]['uri']),
-        'views' => $views_count,
+        'views' => intval($views_count),
         'downloads' => intval($base->field_downloads['und'][0]['value']),
         'likes' => (intval($base->field_likes_count['und'][0]['value'])),
         'link_downloads' => node_load(29)->field_mo_ta_slider['und'][0]['value'],
@@ -112,7 +112,7 @@ function _ccmaps_get_base($hall_level_tid, $attribute_id) {
           'nid' => $base->nid,
           'title' => $base->title,
           'image' => file_create_url($base->field_images['und'][0]['uri']),
-          'views' => $views_count,
+          'views' => intval($views_count),
           'downloads' => intval($base->field_downloads['und'][0]['value']),
           'likes' => (intval($base->field_likes_count['und'][0]['value'])),
           'link_downloads' => node_load(29)->field_mo_ta_slider['und'][0]['value'],
@@ -141,14 +141,13 @@ function _ccmaps_base_retrieve($nid) {
     $var = $wrapper->field_views_count->value() + 1;
     $wrapper->field_views_count->set($var);
     $wrapper->save();
-
     $views_count = $base->field_views_count['und'][0]['value'];
     return [
       'data' => [
         'nid' => $base->nid,
         'title' => $base->title,
         'image' => file_create_url($base->field_images['und'][0]['uri']),
-        'views' => $views_count,
+        'views' => intval($views_count),
         'downloads' => intval($base->field_downloads['und'][0]['value']),
         'likes' => (intval($base->field_likes_count['und'][0]['value'])),
         'link_downloads' => (node_load(29)->field_mo_ta_slider['und'][0]['value']),
@@ -329,12 +328,12 @@ function _ccmaps_get_base_funny_map() {
     $base_nids = array_keys($result['node']);
     $bases = entity_load('node', $base_nids);
     foreach ($bases as $id => $base) {
-      $views_count = intval(strip_tags(views_embed_view('api_node_view_count', 'block_node_view_count_api', $base->nid)));
+      $views_count = $base->field_views_count['und'][0]['value'];
       $filter_base[] = [
         'nid' => $base->nid,
         'title' => $base->title,
         'image' => file_create_url($base->field_images['und'][0]['uri']),
-        'views' => $views_count,
+        'views' => intval($views_count),
         'downloads' => intval($base->field_downloads['und'][0]['value']),
         'likes' => intval($base->field_likes_count['und'][0]['value']),
         'link_downloads' => node_load(29)->field_mo_ta_slider['und'][0]['value'],
