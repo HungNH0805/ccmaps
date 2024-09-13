@@ -1,0 +1,36 @@
+name = ccmaps
+core = 7.x
+package = Core
+version = VERSION
+
+stylesheets[all][] =  wp-content/themes/cocbases/css/bootstrap.min.css
+stylesheets[all][] =  wp-content/themes/cocbases/css/slick.min.css
+stylesheets[all][] =  wp-content/themes/cocbases/css/all.min.css
+stylesheets[all][] =  wp-includes/css/dist/block-library/style.min.css
+stylesheets[all][] =  wp-content/themes/cocbases/style.css
+stylesheets[all][] =  wp-content/plugins/recent-posts-widget-with-thumbnails/public.css
+stylesheets[all][] =  wp-content/themes/cocbases/css/custom.css
+
+
+
+scripts[] = wp-includes/js/jquery/jquery.min.js
+scripts[] = wp-includes/js/jquery/jquery-migrate.min.js
+scripts[] = wp-content/themes/cocbases/js/bootstrap.bundle.min.js
+scripts[] = wp-content/themes/cocbases/js/slick.min.js
+scripts[] = wp-content/themes/cocbases/js/custom.js
+scripts[] = wp-content/plugins/wp-smushit/app/assets/js/smush-lazy-load.min.js
+
+regions[content] = Content
+regions[main_content_front] = Main Content Front
+regions[contact_footer] = Contact Footer
+regions[footer_col1] = Footer col 1
+regions[footer_col2] = Footer col 2
+regions[footer_col3] = Footer col 3
+regions[footer_col4] = Footer col 4
+regions[footer_share] = Footer share
+regions[sidebar_first] = Sidebar first
+regions[contact_info] = Contact information
+regions[contact_form] = Contact Form
+regions[map_info] = Map information
+
+

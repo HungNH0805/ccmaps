@@ -1,0 +1,25 @@
+<?php
+/**
+ * @file
+ * Module file for Housing Schemes Services.
+ * Contains the resource declarations for the service APIs
+ * and other commons functions/hooks. if necessary
+ */
+
+/**
+ * Implements hook_services_resources().
+ * Create service resource for APIs to return the necessary json data.
+ */
+function housing_schemes_services_services_resources() {
+  $resources = array();
+
+  //Include the necessary inc files.
+  module_load_include('inc', 'housing_schemes_services', 'includes/housing_schemes.services');
+
+  //Service Apis for contents.
+  $resources += housing_schemes_services_resource();
+
+  return $resources;
+}
+?>
+

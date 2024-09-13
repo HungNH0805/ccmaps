@@ -1,0 +1,6 @@
+name = RESTfull
+description = Contains the resources
+core = 7.x
+
+dependencies[] = restfull
+registry_autoload[] = PSR-4

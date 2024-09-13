@@ -1,0 +1,12 @@
+#admin-menu, #admin-menu .dropdown{
+  z-index: 99999;
+}
+.rating-box .fivestar-static-item .form-item.form-type-item {
+  display: flex;
+  justify-content: space-between;
+}
+.rating-box .form-item.form-type-select.form-item-vote {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+}

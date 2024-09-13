@@ -1,0 +1,479 @@
+<?php
+/**
+ * Implements hook_services_resources().
+ */
+
+function ccmaps_services_resources() {
+  $resoures = array();
+  $resoures['ccmaps-api'] = array(
+    'operations' => array(
+      'retrieve' => array(
+        'help' => 'Retrieve maps',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'callback'=> '_ccmaps_resource_retrieve',
+        'args' => array(
+          array(
+            'name' => 'nid',
+            'optional' => FALSE,
+            'source' => array('path' => 0),
+            'type'=>'int',
+            'description' => 'The nid to retrieve map.',
+          ),
+        ),
+        'access callback' => '_ccmaps_resource_access',
+      ),
+    ),
+    'actions' => array(
+      'get-all-attributes' => array(
+        'help' => 'Get all attributes',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'args' => array(
+          array(
+            'name' => 'tid',
+            'optional' => TRUE,
+            'source' => array('data' => 'tid'),
+            'type'=>'int',
+            'description' => 'The tid to get attributes',
+          ),
+        ),
+        'callback'=> '_ccmaps_get_all_attributes',
+        'access callback' => '_ccmaps_resource_access',
+      ),
+      'get-base' => array(
+        'help' => 'Get base',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'args' => array(
+          array(
+            'name' => 'hall_level_tid',
+            'optional' => TRUE,
+            'source' => array('data' => 'hall_level_tid'),
+            'type'=>'int',
+            'description' => 'The tid to get base',
+          ),
+          array(
+            'name' => 'attribute_tid',
+            'optional' => TRUE,
+            'source' => array('data' => 'attribute_tid'),
+            'type'=>'int',
+            'description' => 'The tid to get base',
+          ),
+        ),
+        'callback'=> '_ccmaps_get_base',
+        'access callback' => '_ccmaps_resource_access',
+      ),
+      'get-base-sort' => array(
+        'help' => 'Get base filter',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'args' => array(
+          array(
+            'name' => 'field_sort',
+            'optional' => TRUE,
+            'source' => array('data' => 'field_sort'),
+            'type'=>'int',
+            'description' => 'The field to filter base',
+          ),
+          array(
+            'name' => 'value_sort',
+            'optional' => TRUE,
+            'source' => array('data' => 'value_sort'),
+            'type'=>'int',
+            'description' => 'The value to filter base',
+          ),
+        ),
+        'callback'=> '_ccmaps_get_base_sort',
+        'access callback' => '_ccmaps_resource_access',
+      ),
+      'get-base-sort-created' => array(
+        'help' => 'Get base filter created',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'args' => array(
+          array(
+            'name' => 'flag',
+            'optional' => TRUE,
+            'source' => array('data' => 'flag'),
+            'type'=>'int',
+            'description' => 'The flag to filter base',
+          ),
+        ),
+        'callback'=> '_ccmaps_get_base_sort_created',
+        'access callback' => '_ccmaps_resource_access',
+      ),
+      'get-config-block' => array(
+        'help' => 'Get element home screen',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'args' => array(
+          array(
+            'name' => 'tag',
+            'optional' => TRUE,
+            'source' => array('data' => 'tag'),
+            'type'=>'int',
+            'description' => 'The tag to filter block',
+          ),
+        ),
+        'callback'=> '_ccmaps_get_config_block',
+        'access callback' => '_ccmaps_resource_access',
+      ),
+      'update-downloads' => array(
+        'help' => 'update downloads hall',
+        'file' => array('type' => 'inc', 'module' => 'ccmaps', 'name' => 'resources/ccmaps.resources'),
+        'callback' => '_downloads_base_update',
+        'args' => array(
+          array(
+            'name' => 'nid',
+            'optional' => FALSE,
+            'source' => array('data' => 'nid'),
+            'type' => 'int',
+            'description' => 'The nid of the node to get',
+          ),
+        ),
+        'access callback' => '_ccmaps_resource_access',
+      ),
+    ),
+  );
+  $resoures['get-all-hall-level'] = array(
+    'operations' => array(
+      'retrieve' => array(
+        'help' => 'Get all hall level',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'callback'=> '_ccmaps_get_all_hall_level',
+        'args' => array(
+          array(
+            'name' => 'tid',
+            'optional' => FALSE,
+            'source' => array('path' => 0),
+            'type'=>'int',
+            'description' => 'The tid to get all hall level',
+          ),
+        ),
+        'access callback' => '_ccmaps_resource_access',
+      ),
+    ),
+  );
+  $resoures['get-all-attributes'] = array(
+    'operations' => array(
+      'index' => array(
+        'help' => 'Get all attributes',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'args' => array(
+          array(
+            'name' => 'tid',
+            'optional' => TRUE,
+            'type' => 'int',
+            'description' => 'The zero-based index of the page to get, defaults to 0.',
+            'default value' => 0,
+            'source' => array('param' => 'tid'),
+          ),
+        ),
+        'callback'=> '_ccmaps_get_all_attributes',
+        'access callback' => '_ccmaps_resource_access',
+      ),
+    ),
+  );
+  $resoures['get-config-block'] = array(
+    'operations' => array(
+      'index' => array(
+        'help' => 'Get config-block',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'args' => array(
+          array(
+            'name' => 'tid',
+            'optional' => TRUE,
+            'type' => 'int',
+            'description' => 'The zero-based index of the page to get, defaults to 0.',
+            'default value' => 26,
+            'source' => array('param' => 'tid'),
+          ),
+        ),
+        'callback'=> '_ccmaps_get_config_block',
+        'access callback' => '_ccmaps_resource_access',
+      ),
+    ),
+  );
+  $resoures['base'] = array(
+    'operations' => array(
+      'retrieve' => array(
+        'help' => 'Retrieve base',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'callback'=> '_ccmaps_base_retrieve',
+        'args' => array(
+          array(
+            'name' => 'nid',
+            'optional' => FALSE,
+            'source' => array('path' => 0),
+            'type'=>'int',
+            'description' => 'The nid to retrieve base.',
+          ),
+        ),
+        'access callback' => '_ccmaps_resource_access',
+      ),
+      'index' => array(
+        'help' => 'Get base',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'args' => array(
+          array(
+            'name' => 'hall_level_tid',
+            'optional' => FALSE,
+            'source' => array('param' => 'hall_level_tid'),
+            'type'=>'int',
+            'description' => 'The tid of hall level',
+          ),
+          array(
+            'name' => 'attribute_tid',
+            'optional' => TRUE,
+            'source' => array('param' => 'attribute_tid'),
+            'type'=>'int',
+            'description' => 'The tid of attributes',
+          ),
+        ),
+        'callback'=> '_ccmaps_get_base',
+        'access callback' => '_ccmaps_resource_access',
+      ),
+      'update' => array(
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'callback' => '_base_resource_download_update',
+        'args' => array(
+          array(
+            'name' => 'nid',
+            'optional' => FALSE,
+            'source' => array('path' => 0),
+            'type' => 'int',
+            'description' => 'The nid of the base to get',
+          ),
+        ),
+        'access callback' => '_ccmaps_resource_access',
+        'access arguments' => array('update'),
+        'access arguments append' => TRUE,
+      ),
+    ),
+  );
+  $resoures['top-map'] = array(
+    'operations' => array(
+      'index' => array(
+        'help' => 'Get base top map',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+//        'args' => array(
+//          array(
+//            'name' => 'flag',
+//            'optional' => TRUE,
+//            'source' => array('param' => 'flag'),
+//            'type'=>'int',
+//            'description' => 'Flag to sort (DESC/ASC)',
+//          ),
+//        ),
+        'callback'=> '_ccmaps_get_base_topmap',
+        'access callback' => '_ccmaps_resource_access',
+      ),
+    ),
+    $resoures['update-like'] = array(
+    'operations' => array(
+      'update' => array(
+        'help' => 'Update likes count',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'args' => array(
+          array(
+            'name' => 'nid',
+            'optional' => FALSE,
+            'source' => array('path' => 0),
+            'type' => 'int',
+            'description' => 'The nid of the base to update like',
+          ),
+        ),
+        'callback'=> '_base_resource_like_update',
+        'access callback' => '_ccmaps_resource_access',
+      ),
+    ),
+  )
+);
+  $resoures['funny-map'] = array(
+    'operations' => array(
+      'index' => array(
+        'help' => 'Get base sort created',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'callback'=> '_ccmaps_get_base_funny_map',
+        'access callback' => '_ccmaps_resource_access',
+      ),
+    ),
+  );
+  $resoures['builder-base'] = array(
+    'operations' => array(
+      'index' => array(
+        'help' => 'Get builder base ',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'callback'=> '_ccmaps_builder_base',
+        'access callback' => '_ccmaps_resource_access',
+      ),
+    ),
+  );
+  $resoures['troops-combo'] = array(
+    'operations' => array(
+      'index' => array(
+        'help' => 'Get troops combo ',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'callback'=> '_ccmaps_troops_combo',
+        'access callback' => '_ccmaps_resource_access',
+      ),
+      'retrieve' => array(
+        'help' => 'Retrieve troops combo',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'callback'=> '_ccmaps_troops_combo_retrieve',
+        'args' => array(
+          array(
+            'name' => 'nid',
+            'optional' => FALSE,
+            'source' => array('path' => 0),
+            'type'=>'int',
+            'description' => 'The nid to retrieve troops combo.',
+          ),
+        ),
+        'access callback' => '_ccmaps_resource_access',
+      ),
+    ),
+  );
+  $resoures['gems-tip'] = array(
+    'operations' => array(
+      'index' => array(
+        'help' => 'Retrieve gems tip',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'callback'=> '_ccmaps_gems_tip_index',
+        'access callback' => '_ccmaps_resource_access',
+      ),
+      'retrieve' => array(
+        'help' => 'Retrieve gems tip',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'callback'=> '_ccmaps_gems_tip_retrieve',
+        'args' => array(
+          array(
+            'name' => 'nid',
+            'optional' => FALSE,
+            'source' => array('path' => 0),
+            'type'=>'int',
+            'description' => 'The nid to retrieve gems tip.',
+          ),
+        ),
+        'access callback' => '_ccmaps_resource_access',
+      ),
+    ),
+    'actions' => array(
+      'time-to-gem' => array(
+        'help' => 'calculate time to gem',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'callback'=> '_ccmaps_time_to_gem',
+        'args' => array(
+          array(
+            'name' => 'minutes',
+            'optional' => FALSE,
+            'source' => array('data' => 'minutes'),
+            'type'=>'int',
+            'description' => 'The minutes'
+          ),
+          array(
+            'name' => 'hours',
+            'optional' => TRUE,
+            'source' => array('data' => 'hours'),
+            'type'=>'string',
+            'description' => 'The hours'
+          ),
+          array(
+            'name' => 'days',
+            'optional' => TRUE,
+            'source' => array('data' => 'days'),
+            'type'=>'string',
+            'description' => 'The days'
+          ),
+        ),
+        'access callback' => '_ccmaps_resource_access'
+      ),
+      'gold-to-gem' => array(
+        'help' => 'calculate gold to gem',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'callback'=> '_ccmaps_gold_to_gem',
+        'args' => array(
+          array(
+            'name' => 'resources',
+            'optional' => FALSE,
+            'source' => array('data' => 'resources'),
+            'type'=>'int',
+            'description' => 'The resources'
+          ),
+        ),
+        'access callback' => '_ccmaps_resource_access'
+      ),
+      'dark-elixir-to-gem' => array(
+        'help' => 'calculate dark elixir to gem',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'callback'=> '_ccmaps_dark_elixir_to_gem',
+        'args' => array(
+          array(
+            'name' => 'resources',
+            'optional' => FALSE,
+            'source' => array('data' => 'resources'),
+            'type'=>'int',
+            'description' => 'The resources'
+          ),
+        ),
+        'access callback' => '_ccmaps_resource_access'
+      ),
+      'gem-to-usd' => array(
+        'help' => 'calculate gem to usd',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'callback'=> '_ccmaps_gem_to_usd',
+        'args' => array(
+          array(
+            'name' => 'gems',
+            'optional' => FALSE,
+            'source' => array('data' => 'gems'),
+            'type'=>'int',
+            'description' => 'The gems'
+          ),
+        ),
+        'access callback' => '_ccmaps_resource_access'
+      ),
+    ),
+  );
+  $resoures['xp-calculator'] = array(
+    'operations' => array(
+
+    ),
+    'actions' => array(
+      'xp-each-level' => array(
+        'help' => 'calculate time to gem',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'callback'=> '_ccmaps_xp_each_level',
+        'args' => array(
+          array(
+            'name' => 'level',
+            'optional' => FALSE,
+            'source' => array('data' => 'level'),
+            'type'=>'int',
+            'description' => 'The level'
+          ),
+        ),
+        'access callback' => '_ccmaps_resource_access'
+      ),
+      'total-xp-level' => array(
+        'help' => 'calculate total xp level',
+        'file' => array('type'=>'inc', 'module'=>'ccmaps','name'=>'resources/ccmaps.resources'),
+        'callback'=> '_ccmaps_total_xp_level',
+        'args' => array(
+          array(
+            'name' => 'level',
+            'optional' => FALSE,
+            'source' => array('data' => 'level'),
+            'type'=>'int',
+            'description' => 'The level'
+          ),
+        ),
+        'access callback' => '_ccmaps_resource_access'
+      ),
+    ),
+  );
+
+  return $resoures;
+}
+
+/**
+ * Implements hook_node_view().
+ */
+function ccmaps_node_view($node, $view_mode, $langcode) {
+  drupal_add_js(drupal_get_path('module', 'ccmaps') . '/resources/ccmaps.js');
+}

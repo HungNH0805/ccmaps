@@ -1,0 +1,6 @@
+name = drupalsquare
+description = Custom services resource example
+core = 7.x
+dependencies[] = services
+dependencies[] = rest_server
+

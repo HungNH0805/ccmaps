@@ -1,0 +1,53 @@
+<?php
+
+/**
+ * Implements hook_services_resources().
+ */
+function drupalsquare_services_resources() {
+  $resoures = array();
+  $resoures['drupalsquare'] = array(
+    'operations' => array(
+      'retrieve' => array(
+        'help' => 'Retrieve users checked in status',
+        'file' => array('type'=>'inc', 'module'=>'drupalsquare','name'=>'resources/drupalsquare.resources'),
+        'callback'=> '_drupalsquare_resource_retrieve',
+        'args' => array(
+          array(
+            'name' => 'uid',
+            'optional' => FALSE,
+            'source' => array('path' => 0),
+            'type'=>'int',
+            'description' => 'The uid the user to retrieve status for.'
+          )
+        ),
+        'access callback' => '_drupalsquare_resource_access'
+      ),
+    ),
+    'actions' => array(
+      'checkin' => array(
+        'help' => 'Checkin the specified user.',
+        'file' => array('type'=>'inc', 'module'=>'drupalsquare','name'=>'resources/drupalsquare.resources'),
+        'callback'=> '_drupalsquare_resource_checkin',
+        'args' => array(
+          array(
+            'name' => 'uid',
+            'optional' => FALSE,
+            'source' => array('data' => 'uid'),
+            'type'=>'int',
+            'description' => 'The uid the user to check in'
+          ),
+          array(
+            'name' => 'date',
+            'optional' => TRUE,
+            'source' => array('data' => 'date'),
+            'type'=>'string',
+            'description' => 'The current timestamp for the user to check in'
+          ),
+        ),
+        'access callback' => '_drupalsquare_resource_access'
+      ),
+    ),
+
+  );
+  return $resoures;
+}

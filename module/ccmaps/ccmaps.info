@@ -1,0 +1,6 @@
+name = ccmaps API
+description = Custom services resource
+core = 7.x
+dependencies[] = services
+dependencies[] = rest_server
+
